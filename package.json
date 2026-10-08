@@ -1,0 +1,15 @@
+{
+  "name": "amphibiui-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "yarn@4.6.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspace amphibiui build && yarn workspace @amphibiui/sample-app dev",
+    "build": "yarn workspace amphibiui build && yarn workspace @amphibiui/sample-app build",
+    "typecheck": "yarn workspace amphibiui typecheck && yarn workspace @amphibiui/sample-app typecheck"
+  }
+}
