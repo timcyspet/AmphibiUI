@@ -9,6 +9,7 @@
     "declarationMap": true,
     "outDir": "dist",
     "rootDir": "src",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true

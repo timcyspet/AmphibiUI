@@ -2,7 +2,13 @@ import type { ReactNode } from "react";
 import { Header } from "./Header.js";
 import { Sidebar } from "./Sidebar.js";
 
-export interface DashboardNavItem { id: string; label: string; icon?: string; }
+export interface DashboardNavItem {
+  id: string;
+  label: string;
+  icon?: string;
+  badge?: string;
+  children?: DashboardNavItem[];
+}
 export function DashboardLayout({ children, title, navItems, activePage, onNavigate }: {
   children: ReactNode; title: string; navItems: DashboardNavItem[]; activePage: string; onNavigate: (id: string) => void;
 }) {

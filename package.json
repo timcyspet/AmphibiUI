@@ -10,6 +10,9 @@
   "scripts": {
     "dev": "yarn workspace amphibiui build && yarn workspace @amphibiui/sample-app dev",
     "build": "yarn workspace amphibiui build && yarn workspace @amphibiui/sample-app build",
-    "typecheck": "yarn workspace amphibiui typecheck && yarn workspace @amphibiui/sample-app typecheck"
+    "typecheck": "yarn workspace amphibiui build && yarn workspace @amphibiui/sample-app typecheck",
+    "dev:npm": "npm run build:npm && npm run dev --workspace=@amphibiui/sample-app",
+    "build:npm": "npm run build --workspace=amphibiui && npm run build --workspace=@amphibiui/sample-app",
+    "typecheck:npm": "npm run build --workspace=amphibiui && npm run typecheck --workspace=@amphibiui/sample-app"
   }
 }

@@ -1,9 +1,28 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { Alert, Avatar, Badge, Button, Card, List, Modal, Pagination, Progressbar, Tabs } from "../components/Elements/index.js";
+import { DashboardChart } from "../components/Charts/DashboardChart.js";
+import { useAmphibiUI } from "../context/AmphibiUIContext.js";
+import { themeTokens } from "../theme/tokens.js";
+import type { ColumnDefinition } from "tabulator-tables";
+import type { DashboardGridWidget } from "../components/Layout/DashboardGrid.js";
+
+const CalendarPage = lazy(() => import("./CalendarPage.js"));
+const FormElementsPage = lazy(() => import("./FormElementsPage.js"));
+const TabulatorDataTable = lazy(() => import("../components/DataTable/TabulatorDataTable.js")
+  .then(({ TabulatorDataTable: Component }) => ({ default: Component })));
+const DashboardGrid = lazy(() => import("../components/Layout/DashboardGrid.js")
+  .then(({ DashboardGrid: Component }) => ({ default: Component })));
 
 export const pageCatalog = [
-  { id: "data-tables", label: "Data Tables" }, { id: "settings", label: "Settings" },
+  { id: "dashboard", label: "Dashboard" }, { id: "calendar", label: "Calendar" }, { id: "data-tables", label: "Data Tables" },
+  { id: "form-elements", label: "Form Elements" }, { id: "settings", label: "Settings" },
   { id: "profile", label: "Profile" }, { id: "faq", label: "FAQ" }, { id: "pricing", label: "Pricing" },
+  { id: "logistics-dashboard", label: "Logistics Dashboard" }, { id: "ai-dashboard", label: "AI Dashboard" },
+  { id: "sales-dashboard", label: "Sales Dashboard" }, { id: "finance-dashboard", label: "Finance Dashboard" },
+  { id: "ecommerce-dashboard", label: "E-Commerce Dashboard" }, { id: "analytics-dashboard", label: "Analytics Dashboard" },
+  { id: "marketing-hub", label: "Marketing Hub" }, { id: "crm-platform", label: "CRM Platform" },
+  { id: "stock-portfolio-dashboard", label: "Stock Portfolio" }, { id: "saas-interface", label: "SaaS Interface" },
+  { id: "hr-system-dashboard", label: "HR System Dashboard" },
   { id: "mailbox", label: "Mailbox" }, { id: "chat", label: "Chat" }, { id: "teams", label: "Teams" },
   { id: "terms", label: "Terms & Conditions" }, { id: "kanban", label: "Kanban" },
   { id: "files", label: "File Manager" }, { id: "tickets", label: "Support Tickets" },
@@ -12,6 +31,24 @@ export const pageCatalog = [
   { id: "not-found", label: "404 Error" }, { id: "maintenance", label: "Maintenance" },
 ] as const;
 export type PageId = (typeof pageCatalog)[number]["id"];
+
+const dashboardVariants = {
+  "logistics-dashboard": lazy(() => import("./Dashboards/LogisticsDashboard.js")),
+  "ai-dashboard": lazy(() => import("./Dashboards/AIDashboard.js")),
+  "sales-dashboard": lazy(() => import("./Dashboards/SalesDashboard.js")),
+  "finance-dashboard": lazy(() => import("./Dashboards/FinanceDashboard.js")),
+  "ecommerce-dashboard": lazy(() => import("./Dashboards/ECommerceDashboard.js")),
+  "analytics-dashboard": lazy(() => import("./Dashboards/AnalyticsDashboard.js")),
+  "marketing-hub": lazy(() => import("./Dashboards/MarketingHub.js")),
+  "crm-platform": lazy(() => import("./Dashboards/CRMPlatform.js")),
+  "stock-portfolio-dashboard": lazy(() => import("./Dashboards/StockPortfolioDashboard.js")),
+  "saas-interface": lazy(() => import("./Dashboards/SaaSInterface.js")),
+  "hr-system-dashboard": lazy(() => import("./Dashboards/HRSystemDashboard.js")),
+};
+type DashboardVariantId = keyof typeof dashboardVariants;
+function isDashboardVariant(page: PageId): page is DashboardVariantId {
+  return Object.prototype.hasOwnProperty.call(dashboardVariants, page);
+}
 
 const members = [
   { name: "Olivia Rhye", email: "olivia@acme.co", role: "Product Designer", status: "Active" },
@@ -24,14 +61,82 @@ const members = [
 const money = ["Starter", "Growth", "Scale"];
 const features = ["Unlimited projects", "Team collaboration", "Advanced reporting", "Priority support"];
 
+function AnalyticsDashboardPage() {
+  const { theme } = useAmphibiUI();
+  const tokens = themeTokens[theme];
+  const widgets: DashboardGridWidget[] = [
+    {
+      id: "metrics",
+      label: "Workspace metrics",
+      defaultHeight: 5,
+      content: <div className="aui-dashboard-metrics">
+        {[["Total revenue", "$48,290", "+12.8%"], ["Active users", "2,420", "+8.2%"], ["New signups", "384", "+16.4%"], ["Churn rate", "2.4%", "-0.6%"]].map(([label, value, change]) =>
+          <Card key={label}><p>{label}</p><strong>{value}</strong><span>{change} this month</span></Card>)}
+      </div>,
+    },
+    {
+      id: "revenue-chart",
+      label: "Revenue over time",
+      defaultWidth: "half",
+      defaultHeight: 12,
+      content: <DashboardChart type="line" title="Revenue over time" description="Monthly recurring revenue" height={300} data={{
+        labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+        datasets: [{ label: "Revenue", data: [28000, 32000, 30500, 39000, 42000, 48290], borderColor: tokens.primary, backgroundColor: `${tokens.primary}22`, fill: true, tension: 0.35, pointBackgroundColor: tokens.primary }],
+      }} />,
+    },
+    {
+      id: "customers-chart",
+      label: "New customers",
+      defaultWidth: "half",
+      defaultHeight: 12,
+      content: <DashboardChart type="bar" title="New customers" description="Monthly customer acquisition" height={300} data={{
+        labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+        datasets: [{ label: "Customers", data: [82, 106, 94, 138, 156, 184], backgroundColor: tokens.primary, borderRadius: 5 }],
+      }} />,
+    },
+    {
+      id: "traffic-chart",
+      label: "Traffic sources",
+      defaultWidth: "half",
+      defaultHeight: 12,
+      content: <DashboardChart type="doughnut" title="Traffic sources" description="Visitors by channel" height={260} data={{
+        labels: ["Organic search", "Direct", "Referral", "Social"],
+        datasets: [{ data: [42, 28, 18, 12], backgroundColor: [tokens.primary, tokens.accent, tokens.success, tokens.border], borderColor: tokens.surface, borderWidth: 3 }],
+      }} options={{ cutout: "68%", plugins: { legend: { position: "bottom" } } }} />,
+    },
+  ];
+
+  return <div className="aui-stack">
+    <div className="aui-page-intro"><div><h2>Workspace overview</h2><p>Track activity and performance across your workspace.</p></div><Button variant="secondary">Last 30 days⌄</Button></div>
+    <Suspense fallback={<Card>Loading dashboard widgets...</Card>}>
+      <DashboardGrid dashboardId="workspace-overview" widgets={widgets} />
+    </Suspense>
+  </div>;
+}
+
 export function DataTablesPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<"asc" | "desc">("asc");
-  const filtered = useMemo(() => members.filter((member) => `${member.name} ${member.email} ${member.role}`.toLowerCase().includes(search.toLowerCase())).sort((a, b) => sort === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)), [search, sort]);
+  const [statusFilter, setStatusFilter] = useState("All statuses");
+  const [roleFilter, setRoleFilter] = useState("All roles");
+  const [tableEngine, setTableEngine] = useState<"native" | "tabulator">("native");
+  const roles = [...new Set(members.map((member) => member.role))];
+  const filtered = useMemo(() => members
+    .filter((member) => `${member.name} ${member.email} ${member.role}`.toLowerCase().includes(search.toLowerCase()))
+    .filter((member) => statusFilter === "All statuses" || member.status === statusFilter)
+    .filter((member) => roleFilter === "All roles" || member.role === roleFilter), [search, statusFilter, roleFilter]);
+  const sorted = useMemo(() => [...filtered]
+    .sort((a, b) => sort === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)), [filtered, sort]);
   const pageSize = 4;
   const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  return <div className="aui-stack"><div className="aui-page-intro"><div><h2>Team members</h2><p>Manage your team and their account permissions.</p></div><Button>+ Add member</Button></div><Card><div className="aui-table-toolbar"><label className="aui-search">⌕ <input aria-label="Search members" placeholder="Search members" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} /></label><Button variant="secondary">Filters</Button></div><div className="aui-table-wrap"><table className="aui-table"><thead><tr><th><input type="checkbox" aria-label="Select all members" /></th><th><button onClick={() => setSort(sort === "asc" ? "desc" : "asc")}>Name {sort === "asc" ? "↑" : "↓"}</button></th><th>Status</th><th>Role</th><th>Email</th><th>Actions</th></tr></thead><tbody>{filtered.slice((page - 1) * pageSize, page * pageSize).map((member) => <tr key={member.email}><td><input type="checkbox" aria-label={`Select ${member.name}`} /></td><td><div className="aui-member"><Avatar name={member.name} size="sm" /><strong>{member.name}</strong></div></td><td><Badge tone={member.status === "Active" ? "success" : "default"}>{member.status}</Badge></td><td>{member.role}</td><td>{member.email}</td><td><Button variant="ghost">Edit</Button></td></tr>)}{filtered.length === 0 && <tr><td colSpan={6}>No team members match your search.</td></tr>}</tbody></table></div><Pagination page={Math.min(page, pages)} pages={pages} onChange={setPage} /></Card></div>;
+  const tabulatorColumns = useMemo<ColumnDefinition[]>(() => [
+    { title: "Name", field: "name", sorter: "string", headerSort: true },
+    { title: "Status", field: "status", sorter: "string", headerSort: true },
+    { title: "Role", field: "role", sorter: "string", headerSort: true },
+    { title: "Email", field: "email", sorter: "string", headerSort: true },
+  ], []);
+  return <div className="aui-stack"><div className="aui-page-intro"><div><h2>Team members</h2><p>Manage your team and their account permissions.</p></div><Button>+ Add member</Button></div><Card><div className="aui-table-toolbar"><label className="aui-search">⌕ <input aria-label="Search members" placeholder="Search members" value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} /></label><div className="aui-table-filters"><label>Status<select aria-label="Filter by status" value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }}><option>All statuses</option>{["Active", "Invited", "Inactive"].map((status) => <option key={status}>{status}</option>)}</select></label><label>Role<select aria-label="Filter by role" value={roleFilter} onChange={(event) => { setRoleFilter(event.target.value); setPage(1); }}><option>All roles</option>{roles.map((role) => <option key={role}>{role}</option>)}</select></label><label>Table engine<select aria-label="Table engine" value={tableEngine} onChange={(event) => setTableEngine(event.target.value as "native" | "tabulator")}><option value="native">AmphibiUI</option><option value="tabulator">Tabulator</option></select></label></div></div>{tableEngine === "tabulator" ? <Suspense fallback={<div className="aui-tabulator-loading" role="status">Loading Tabulator table...</div>}><TabulatorDataTable data={filtered} columns={tabulatorColumns} paginationSize={pageSize} ariaLabel="Team members table powered by Tabulator" /></Suspense> : <><div className="aui-table-wrap"><table className="aui-table"><thead><tr><th><input type="checkbox" aria-label="Select all members" /></th><th><button onClick={() => setSort(sort === "asc" ? "desc" : "asc")}>Name {sort === "asc" ? "↑" : "↓"}</button></th><th>Status</th><th>Role</th><th>Email</th><th>Actions</th></tr></thead><tbody>{sorted.slice((page - 1) * pageSize, page * pageSize).map((member) => <tr key={member.email}><td><input type="checkbox" aria-label={`Select ${member.name}`} /></td><td><div className="aui-member"><Avatar name={member.name} size="sm" /><strong>{member.name}</strong></div></td><td><Badge tone={member.status === "Active" ? "success" : "default"}>{member.status}</Badge></td><td>{member.role}</td><td>{member.email}</td><td><Button variant="ghost">Edit</Button></td></tr>)}{filtered.length === 0 && <tr><td colSpan={6}>No team members match your search.</td></tr>}</tbody></table></div><Pagination page={Math.min(page, pages)} pages={pages} onChange={setPage} /></>}</Card></div>;
 }
 
 export function SettingsPage() {
@@ -46,8 +151,15 @@ export function SettingsPage() {
 function ContentPage({ page, onNotice, onNavigate }: { page: PageId; onNotice: (message: string) => void; onNavigate?: (page: PageId) => void }) {
   const title = pageCatalog.find((item) => item.id === page)?.label ?? "Dashboard";
   const card = (heading: string, text: string, action?: string) => <Card key={heading}><div className="aui-page-intro"><div><h3>{heading}</h3><p>{text}</p></div>{action && <Button variant="secondary" onClick={() => onNotice(`${action} complete`)}>{action}</Button>}</div></Card>;
+  if (isDashboardVariant(page)) {
+    const DashboardVariant = dashboardVariants[page];
+    return <Suspense fallback={<Card>Loading dashboard...</Card>}><DashboardVariant /></Suspense>;
+  }
   switch (page) {
+    case "dashboard": return <AnalyticsDashboardPage />;
+    case "calendar": return <Suspense fallback={<Card>Loading calendar...</Card>}><CalendarPage /></Suspense>;
     case "data-tables": return <DataTablesPage />;
+    case "form-elements": return <Suspense fallback={<Card>Loading form elements...</Card>}><FormElementsPage /></Suspense>;
     case "settings": return <SettingsPage />;
     case "profile": return <div className="aui-stack"><Card><div className="aui-profile"><Avatar name="Alex Morgan" size="lg" /><div><h2>Alex Morgan</h2><p>Product Manager · San Francisco, CA</p><p>Building thoughtful products with a focus on people, systems, and the details in between.</p><Button variant="secondary">Edit profile</Button></div></div></Card><div className="aui-grid-3">{card("Projects", "12 active projects")}{card("Team", "Working with 8 teammates")}{card("Activity", "34 contributions this month")}</div></div>;
     case "faq": return <div className="aui-stack">{["How do I invite teammates?", "Can I change my plan?", "Where can I find invoices?", "How do I contact support?"].map((question, index) => <Card key={question}><details><summary>{question}</summary><p>{["Open Settings → Team and select Add member.", "Plan changes are available from Billing settings.", "Invoices are listed in your workspace billing history.", "Send us a message from the Support page."][index]}</p></details></Card>)}</div>;
