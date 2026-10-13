@@ -1,6 +1,6 @@
 {
   "name": "amphibiui",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "sideEffects": [
     "**/*.css"
@@ -34,6 +35,9 @@
     "typescript": "^5.7.0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
     "@fullcalendar/bootstrap5": "^6.1.21",
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
@@ -54,6 +58,7 @@
     "react-chartjs-2": "^5.3.1",
     "react-grid-layout": "2.3.0",
     "react-resizable": "4.0.2",
+    "react-select": "^5.10.2",
     "tabulator-tables": "^6.3.1",
     "world-atlas": "2.0.2"
   }

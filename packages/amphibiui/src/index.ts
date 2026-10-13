@@ -23,6 +23,14 @@ export { AmphibiCalendar } from "./components/Calendar/AmphibiCalendar.js";
 export type { AmphibiCalendarProps } from "./components/Calendar/AmphibiCalendar.js";
 export { RichTextEditor } from "./components/Editor/RichTextEditor.js";
 export type { RichTextEditorProps } from "./components/Editor/RichTextEditor.js";
+export { AmphibiIcon } from "./components/Icon/AmphibiIcon.js";
+export type { AmphibiIconProps } from "./components/Icon/AmphibiIcon.js";
+export {
+  faBell, faCalendarDays, faChartLine, faCheck, faEnvelope, faGear,
+  faMagnifyingGlass, faUser, faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
+export { AmphibiSelect } from "./components/Select/AmphibiSelect.js";
+export type { AmphibiSelectProps } from "./components/Select/AmphibiSelect.js";
 export { LogisticsDashboard } from "./pages/Dashboards/LogisticsDashboard.js";
 export { AIDashboard } from "./pages/Dashboards/AIDashboard.js";
 export { SalesDashboard } from "./pages/Dashboards/SalesDashboard.js";

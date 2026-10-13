@@ -1,8 +1,26 @@
 import { useState, type DragEvent, type ReactNode } from "react";
 import { useAmphibiUIOptional } from "../context/AmphibiUIContext.js";
 import { RichTextEditor } from "../components/Editor/RichTextEditor.js";
+import { AmphibiIcon } from "../components/Icon/AmphibiIcon.js";
+import { AmphibiSelect } from "../components/Select/AmphibiSelect.js";
+import { faBell, faCalendarDays, faChartLine, faEnvelope, faGear, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const multipleOptions = ["Option 1", "Option 2", "Option 3", "Option 4"];
+const departmentOptions = [
+  { value: "design", label: "Design" },
+  { value: "engineering", label: "Engineering" },
+  { value: "marketing", label: "Marketing" },
+  { value: "operations", label: "Operations" },
+];
+type DepartmentOption = (typeof departmentOptions)[number];
+const iconExamples = [
+  { icon: faUser, name: "faUser", description: "Profiles and user accounts" },
+  { icon: faEnvelope, name: "faEnvelope", description: "Mail and messages" },
+  { icon: faBell, name: "faBell", description: "Notifications and alerts" },
+  { icon: faCalendarDays, name: "faCalendarDays", description: "Dates and schedules" },
+  { icon: faChartLine, name: "faChartLine", description: "Analytics and trends" },
+  { icon: faGear, name: "faGear", description: "Settings and preferences" },
+];
 
 function FormSection({ title, children, className }: {
   title: string;
@@ -55,6 +73,8 @@ export function FormElementsPage() {
   const [droppedFileNames, setDroppedFileNames] = useState<string[]>([]);
   const [dragging, setDragging] = useState(false);
   const [richTextLength, setRichTextLength] = useState(0);
+  const [selectedDepartment, setSelectedDepartment] = useState<DepartmentOption | null>(departmentOptions[1]);
+  const [selectedDepartments, setSelectedDepartments] = useState<DepartmentOption[]>([departmentOptions[0]]);
 
   const setDroppedFiles = (files: FileList | null) => {
     if (files) setDroppedFileNames(Array.from(files, (file) => file.name));
@@ -174,6 +194,62 @@ export function FormElementsPage() {
                   </select>
                 </div>
               </div>
+            </div>
+          </FormSection>
+
+          <FormSection title="React Select">
+            <div className="aui-form-controls">
+              <FormField label="Searchable Single Select" htmlFor="form-react-select">
+                <AmphibiSelect<DepartmentOption>
+                  inputId="form-react-select"
+                  aria-label="Searchable department select"
+                  options={departmentOptions}
+                  value={selectedDepartment}
+                  onChange={setSelectedDepartment}
+                  placeholder="Choose a department..."
+                  isClearable
+                />
+              </FormField>
+              <p className="aui-select-selection" aria-live="polite">
+                Selected department: {selectedDepartment?.label ?? "None"}
+              </p>
+              <FormField label="Searchable Multi-select" htmlFor="form-react-multi-select">
+                <AmphibiSelect<DepartmentOption, true>
+                  inputId="form-react-multi-select"
+                  aria-label="Multiple departments"
+                  options={departmentOptions}
+                  value={selectedDepartments}
+                  onChange={(value) => setSelectedDepartments([...value])}
+                  placeholder="Choose departments..."
+                  isMulti
+                  closeMenuOnSelect={false}
+                />
+              </FormField>
+              <p className="aui-select-selection" aria-live="polite">
+                Selected departments: {selectedDepartments.length > 0
+                  ? selectedDepartments.map(({ label }) => label).join(", ")
+                  : "None"}
+              </p>
+            </div>
+          </FormSection>
+
+          <FormSection title="Font Awesome Icons">
+            <div className="aui-table-wrap">
+              <table className="aui-table aui-icon-table">
+                <caption>Common Font Awesome icons and their use cases</caption>
+                <thead>
+                  <tr><th scope="col">Preview</th><th scope="col">Icon name</th><th scope="col">Example usage</th></tr>
+                </thead>
+                <tbody>
+                  {iconExamples.map(({ icon, name, description }) => (
+                    <tr key={name}>
+                      <td><AmphibiIcon icon={icon} aria-hidden="true" /></td>
+                      <td><code>{name}</code></td>
+                      <td>{description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </FormSection>
 

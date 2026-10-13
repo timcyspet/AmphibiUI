@@ -306,6 +306,22 @@
 .aui-rich-text-editor-bootstrap .aui-rich-text-toolbar button { border-radius: .25rem; }
 .aui-rich-text-editor-tailwind { border-radius: .5rem; }
 .aui-rich-text-status { margin: 0; color: var(--aui-text-muted); font-size: 11px; }
+.aui-icon { color: inherit; }
+.aui-icon-bootstrap { vertical-align: -.08em; }
+.aui-icon-table { min-width: 440px; white-space: normal; }
+.aui-icon-table caption { padding: 0 12px 10px; color: var(--aui-text-muted); font-size: 11px; text-align: left; }
+.aui-icon-table td:first-child { width: 60px; color: var(--aui-primary); font-size: 16px; }
+.aui-icon-table td:nth-child(2) { width: 170px; }
+.aui-icon-table code { color: var(--aui-text); font-size: 11px; }
+.aui-select-selection { margin: -7px 0 0; color: var(--aui-text-muted); font-size: 11px; }
+.aui-react-select { min-width: 0; font-size: 12px; }
+.aui-react-select .aui-select__control { transition: border-color .16s ease, box-shadow .16s ease; }
+.aui-react-select .aui-select__control--is-disabled { background-color: var(--aui-surface-muted); opacity: .72; }
+.aui-react-select .aui-select__option { font-size: 12px; }
+.aui-react-select .aui-select__multi-value { margin: 2px 4px 2px 0; }
+.aui-react-select .aui-select__multi-value__remove { cursor: pointer; }
+.aui-react-select-bootstrap { font-size: .875rem; }
+.aui-react-select-bootstrap .aui-select__control { min-height: 38px; }
 .aui-check { display: flex; gap: 8px; margin: 12px 0; }
 .aui-list { padding-left: 20px; }
 .aui-list li { margin: 8px 0; }

@@ -112,22 +112,58 @@ import { RichTextEditor } from "amphibiui";
 />;
 ```
 
-  `TabulatorDataTable` wraps Tabulator with local sorting, pagination, and movable
-  columns. It inherits the active theme tokens and switches its visual treatment
-  with the provider framework. The sample app's Data Tables page lets you switch
-  between the existing AmphibiUI table and the Tabulator implementation.
+`AmphibiIcon` wraps Font Awesome's SVG React component and inherits the current
+text color. AmphibiUI exports common solid icons including `faBell`,
+`faCalendarDays`, `faChartLine`, `faCheck`, `faEnvelope`, `faGear`,
+`faMagnifyingGlass`, `faUser`, and `faWandMagicSparkles`. Import other icon
+definitions from `@fortawesome/free-solid-svg-icons`.
 
-  ```tsx
-  import { TabulatorDataTable } from "amphibiui";
+`AmphibiSelect` wraps React Select with the active theme and framework applied,
+while retaining React Select's search, async, and single- or multi-select
+features. Pass its `styles` prop to customize or extend the default theme.
+Both integrations are demonstrated on the Form Elements page.
 
-  <TabulatorDataTable
-    data={[{ name: "Olivia Rhye", role: "Designer" }]}
-    columns={[
-      { title: "Name", field: "name", sorter: "string" },
-      { title: "Role", field: "role", sorter: "string" },
-    ]}
-  />;
-  ```
+```tsx
+import { useState } from "react";
+import { AmphibiIcon, AmphibiSelect, faBell } from "amphibiui";
+
+function Example() {
+  const options = [
+    { value: "design", label: "Design" },
+    { value: "engineering", label: "Engineering" },
+  ];
+  const [selected, setSelected] = useState([options[0]]);
+
+  return (
+    <>
+      <AmphibiIcon icon={faBell} aria-label="Notifications" />
+      <AmphibiSelect
+        options={options}
+        value={selected}
+        onChange={(value) => setSelected([...value])}
+        isMulti
+      />
+    </>
+  );
+}
+```
+
+`TabulatorDataTable` wraps Tabulator with local sorting, pagination, and movable
+columns. It inherits the active theme tokens and switches its visual treatment
+with the provider framework. The sample app's Data Tables page lets you switch
+between the existing AmphibiUI table and the Tabulator implementation.
+
+```tsx
+import { TabulatorDataTable } from "amphibiui";
+
+<TabulatorDataTable
+  data={[{ name: "Olivia Rhye", role: "Designer" }]}
+  columns={[
+    { title: "Name", field: "name", sorter: "string" },
+    { title: "Role", field: "role", sorter: "string" },
+  ]}
+/>;
+```
 
 The sample app's **Dashboards** menu demonstrates the 11 exported industry
 templates: `LogisticsDashboard`, `AIDashboard`, `SalesDashboard`,
@@ -139,6 +175,9 @@ Dashboard tables, cards, spacing, typography, and chart palettes respond to
 the active framework and theme. The **Form Elements** page in the
 **Settings & Pages** menu demonstrates themed inputs, groups, selection
 controls, toggles, file inputs, and drag-and-drop upload.
+The Form Elements page also demonstrates theme-aware React Select controls
+and a Font Awesome icon reference table with previews, icon names, and use
+cases.
 
 Dashboard sections use the exported `DashboardGrid` powered by
 `react-grid-layout`. Users can drag widgets by their handles, resize them, and
