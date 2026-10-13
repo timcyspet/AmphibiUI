@@ -195,3 +195,7 @@ import { Card, DashboardGrid } from "amphibiui";
   ]}
 />;
 ```
+
+## License
+
+AmphibiUI is licensed under the [MIT License](./LICENSE).

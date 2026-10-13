@@ -143,3 +143,7 @@ FullCalendar, and `TabulatorDataTable` wraps Tabulator.
 
 See the [AmphibiUI repository README](https://github.com/timcyspet/AmphibiUI#readme)
 for the sample app, additional examples, and workspace development commands.
+
+## License
+
+AmphibiUI is licensed under the [MIT License](./LICENSE).
