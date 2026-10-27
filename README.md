@@ -180,20 +180,33 @@ and a Font Awesome icon reference table with previews, icon names, and use
 cases.
 
 Dashboard sections use the exported `DashboardGrid` powered by
-`react-grid-layout`. Users can drag widgets by their handles, resize them, and
+`react-grid-layout`. Define widgets with the exported `DashboardGridWidget`
+type; `content` can be any React node, and `defaultWidth` and `defaultHeight`
+set the initial size. Users can drag widgets by their handles, resize them, and
 restore the defaults with **Reset layout**. Responsive layouts are saved per
-dashboard in local storage.
+dashboard in local storage using `dashboardId`.
 
 ```tsx
-import { Card, DashboardGrid } from "amphibiui";
+import { Card, DashboardGrid, type DashboardGridWidget } from "amphibiui";
 
-<DashboardGrid
-  dashboardId="revenue"
-  widgets={[
-    { id: "summary", label: "Summary", content: <Card>Key metrics</Card> },
-    { id: "chart", label: "Revenue", defaultWidth: "half", content: <Card>Chart</Card> },
-  ]}
-/>;
+const widgets: DashboardGridWidget[] = [
+  {
+    id: "summary",
+    label: "Summary",
+    defaultWidth: "half",
+    defaultHeight: 12,
+    content: <Card><h2>$48,250</h2><p>Monthly revenue</p></Card>,
+  },
+  {
+    id: "orders",
+    label: "Orders",
+    defaultWidth: "half",
+    defaultHeight: 12,
+    content: <Card><h2>1,284</h2><p>Orders received</p></Card>,
+  },
+];
+
+<DashboardGrid dashboardId="revenue" widgets={widgets} />;
 ```
 
 ## License

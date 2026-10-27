@@ -138,8 +138,68 @@ The package also exports:
   `pageCatalog`
 
 `DashboardGrid` supports drag and resize, responsive breakpoints, and
-per-dashboard layout persistence in local storage. `AmphibiCalendar` wraps
-FullCalendar, and `TabulatorDataTable` wraps Tabulator.
+per-dashboard layout persistence in local storage. Define each item as a
+`DashboardGridWidget`: `id` must be unique within the grid, `label` appears in
+the widget toolbar, and `content` accepts any React node. `defaultWidth` can be
+`"full"` or `"half"` and `defaultHeight` sets the initial height in grid rows.
+Users can adjust the layout afterward, and it is saved in local storage under
+the supplied `dashboardId`.
+
+```tsx
+import { useState } from "react";
+import { Card, DashboardGrid, type DashboardGridWidget } from "amphibiui";
+
+export function RevenueDashboard() {
+  const [period, setPeriod] = useState("This month");
+  const widgets: DashboardGridWidget[] = [
+    {
+      id: "revenue",
+      label: "Revenue",
+      defaultWidth: "half",
+      defaultHeight: 12,
+      content: (
+        <Card>
+          <h2>$48,250</h2>
+          <p>Revenue for {period.toLowerCase()}</p>
+        </Card>
+      ),
+    },
+    {
+      id: "orders",
+      label: "Orders",
+      defaultWidth: "half",
+      defaultHeight: 12,
+      content: (
+        <Card>
+          <h2>1,284</h2>
+          <p>Orders received</p>
+        </Card>
+      ),
+    },
+    {
+      id: "period",
+      label: "Reporting period",
+      defaultHeight: 8,
+      content: (
+        <Card>
+          <label>
+            Period{" "}
+            <select value={period} onChange={(event) => setPeriod(event.target.value)}>
+              <option>This month</option>
+              <option>Last month</option>
+            </select>
+          </label>
+        </Card>
+      ),
+    },
+  ];
+
+  return <DashboardGrid dashboardId="revenue" widgets={widgets} />;
+}
+```
+
+`AmphibiCalendar` wraps FullCalendar, and `TabulatorDataTable` wraps
+Tabulator.
 
 See the [AmphibiUI repository README](https://github.com/timcyspet/AmphibiUI#readme)
 for the sample app, additional examples, and workspace development commands.

@@ -8,11 +8,13 @@ export {
   Tabs, Tooltip, Video,
 } from "./components/Elements/index.js";
 export { DashboardLayout } from "./components/Layout/DashboardLayout.js";
-export type { DashboardNavItem } from "./components/Layout/DashboardLayout.js";
+export type { DashboardLayoutProps, DashboardNavItem } from "./components/Layout/DashboardLayout.js";
 export { DashboardGrid } from "./components/Layout/DashboardGrid.js";
 export type { DashboardGridProps, DashboardGridWidget } from "./components/Layout/DashboardGrid.js";
 export { Header } from "./components/Layout/Header.js";
+export type { HeaderProps } from "./components/Layout/Header.js";
 export { Sidebar } from "./components/Layout/Sidebar.js";
+export type { SidebarProps } from "./components/Layout/Sidebar.js";
 export { TabulatorDataTable } from "./components/DataTable/TabulatorDataTable.js";
 export type { TabulatorDataTableProps } from "./components/DataTable/TabulatorDataTable.js";
 export { DashboardChart } from "./components/Charts/DashboardChart.js";
